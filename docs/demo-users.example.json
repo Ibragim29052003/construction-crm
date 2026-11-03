@@ -1,0 +1,5 @@
+[
+  { "login": "manager", "email": "manager@crm-demo.test", "password": "YOUR_PASSWORD" },
+  { "login": "ivan", "email": "ivan@crm-demo.test", "password": "YOUR_PASSWORD" },
+  { "login": "maria", "email": "maria@crm-demo.test", "password": "YOUR_PASSWORD" }
+]
