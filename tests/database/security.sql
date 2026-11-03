@@ -82,6 +82,7 @@ begin
   perform public.change_task_status(t1, 'in_review', 2, gen_random_uuid());
   perform set_config('request.jwt.claim.sub', m2::text, true);
   perform pg_temp.must_fail(format('select public.change_task_status(%L,%L,3,%L,%L)',t1,'revision',gen_random_uuid(),'   '), 'COMMENT_REQUIRED');
+  perform pg_temp.must_fail(format('select public.change_task_status(%L,%L,3,%L,%L)',t1,'revision',gen_random_uuid(), E'\n\t'), 'task_history_revision_comment_check');
   perform public.change_task_status(t1, 'revision', 3, gen_random_uuid(), 'Исправить примыкание');
   perform set_config('request.jwt.claim.sub', e1::text, true);
   select count(*) into v_count from public.profiles where id=m2;
