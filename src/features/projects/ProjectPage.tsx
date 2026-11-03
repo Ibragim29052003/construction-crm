@@ -110,8 +110,7 @@ export function ProjectPage() {
           onClose={() => setDialog(null)}
           onDelete={() => void deleteProject()}
         >
-          Объект «{project.name}», все его задачи и их история будут удалены. Это действие нельзя
-          отменить.
+          Объект «{project.name}» и его задачи исчезнут из списков. История изменений сохранится.
         </DeleteDialog>
       )}
     </>

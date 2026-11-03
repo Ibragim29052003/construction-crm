@@ -138,7 +138,15 @@ begin
   perform public.delete_project(p1,1);
   perform public.delete_project(p1,1);
   select count(*) into v_count from public.task_history where task_id=t1;
-  assert v_count=0, 'Каскадное удаление истории';
+  assert v_count=0, 'RLS истории удалённой задачи';
+  perform pg_temp.must_fail(format('select public.change_task_status(%L,%L,7,%L)',t1,'in_progress',gen_random_uuid()), 'NOT_FOUND');
+  perform pg_temp.must_fail(format('select public.save_task(%L,%L,%L,%L,%L)',gen_random_uuid(),'Новая после удаления','',p1,e1), 'NOT_FOUND');
+  execute 'reset role';
+  select count(*) into v_count from public.task_history where task_id=t1;
+  assert v_count=7, 'Удаление не должно уничтожать историю';
+  select count(*) into v_count from public.tasks where id=t1 and deleted_at is not null;
+  assert v_count=1, 'Задача должна сохраняться с отметкой удаления';
+  execute 'set local role authenticated';
   execute 'set local role anon';
   perform pg_temp.must_fail('select * from public.tasks', 'permission denied');
   perform pg_temp.must_fail(format('select public.save_project(%L,%L,%L)',gen_random_uuid(),'Закрыто','Адрес'), 'permission denied');

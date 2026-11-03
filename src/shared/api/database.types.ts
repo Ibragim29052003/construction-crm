@@ -37,6 +37,7 @@ export type Database = {
           address: string
           created_at: string
           created_by: string
+          deleted_at: string | null
           id: string
           name: string
           version: number
@@ -45,6 +46,7 @@ export type Database = {
           address: string
           created_at?: string
           created_by?: string
+          deleted_at?: string | null
           id?: string
           name: string
           version?: number
@@ -53,6 +55,7 @@ export type Database = {
           address?: string
           created_at?: string
           created_by?: string
+          deleted_at?: string | null
           id?: string
           name?: string
           version?: number
@@ -120,6 +123,7 @@ export type Database = {
           assignee_id: string
           author_id: string
           created_at: string
+          deleted_at: string | null
           description: string
           id: string
           project_id: string
@@ -132,6 +136,7 @@ export type Database = {
           assignee_id: string
           author_id?: string
           created_at?: string
+          deleted_at?: string | null
           description?: string
           id?: string
           project_id: string
@@ -144,6 +149,7 @@ export type Database = {
           assignee_id?: string
           author_id?: string
           created_at?: string
+          deleted_at?: string | null
           description?: string
           id?: string
           project_id?: string
@@ -193,6 +199,7 @@ export type Database = {
           assignee_id: string
           author_id: string
           created_at: string
+          deleted_at: string | null
           description: string
           id: string
           project_id: string
@@ -227,6 +234,7 @@ export type Database = {
           address: string
           created_at: string
           created_by: string
+          deleted_at: string | null
           id: string
           name: string
           version: number
@@ -251,6 +259,7 @@ export type Database = {
           assignee_id: string
           author_id: string
           created_at: string
+          deleted_at: string | null
           description: string
           id: string
           project_id: string

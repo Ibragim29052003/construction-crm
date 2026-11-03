@@ -171,7 +171,7 @@ export function TaskPage() {
           onClose={() => setDialog(null)}
           onDelete={() => void deleteTask()}
         >
-          Задача «{task.title}» и её история будут удалены. Это действие нельзя отменить.
+          Задача «{task.title}» исчезнет из списков. История изменений сохранится.
         </DeleteDialog>
       )}
       {target && <TransitionForm task={task} target={target} onClose={() => setTarget(null)} />}

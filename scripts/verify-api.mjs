@@ -117,8 +117,42 @@ try {
   assert.equal(task.status, 'accepted')
   assert.equal(task.history.length, 4)
   assert.ok(task.history.every((event) => event.actor))
+  checked(await manager.client.rpc('delete_task', { p_id: taskId, p_expected_version: 4 }))
+  assert.equal(checked(await manager.client.from('tasks').select('id').eq('id', taskId)).length, 0)
+  assert.ok(
+    (
+      await manager.client.rpc('change_task_status', {
+        p_task_id: taskId,
+        p_status: 'in_progress',
+        p_expected_version: 5,
+        p_request_id: crypto.randomUUID(),
+      })
+    ).error,
+  )
+  const raceProjectId = crypto.randomUUID()
+  checked(
+    await manager.client.rpc('save_project', {
+      p_id: raceProjectId,
+      p_name: 'Проверка удаления',
+      p_address: 'Тестовый адрес',
+    }),
+  )
+  const [creation, deletion] = await Promise.all([
+    manager.client.rpc('save_task', {
+      ...createArgs,
+      p_id: crypto.randomUUID(),
+      p_project_id: raceProjectId,
+    }),
+    manager.client.rpc('delete_project', { p_id: raceProjectId, p_expected_version: 1 }),
+  ])
+  assert.ok(!deletion.error)
+  assert.ok(!creation.error || creation.error.message === 'NOT_FOUND')
+  assert.equal(
+    checked(await manager.client.from('tasks').select('id').eq('project_id', raceProjectId)).length,
+    0,
+  )
   console.log(
-    'API: вход трёх пользователей, запрет регистрации, RLS, вложенные связи, защита истории, повторы и параллельные изменения — OK.',
+    'API: вход, запрет регистрации, RLS, история, идемпотентность, конкурентные запросы и мягкое удаление — OK.',
   )
 } finally {
   if (project)
